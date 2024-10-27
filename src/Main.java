@@ -1,5 +1,6 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class Main {
@@ -8,6 +9,8 @@ public class Main {
         String url ="jdbc:mysql://localhost:3306/tran";
         String name ="root";
         String pass = "abhijeet@2002";
+        String add = "update send set amount = amount + ? where Account_number = ?";
+        String sub = "update send set amount = amount - ? where Account_number = ?";
         try{
             Class.forName("com.mysql.jdbc.Driver");
         }catch (ClassNotFoundException e){
@@ -16,6 +19,29 @@ public class Main {
         try{
             Connection con = DriverManager.getConnection(url,name,pass);
             System.out.println("Connection is done");
+            con.setAutoCommit(false);
+            try{
+                PreparedStatement adding = con.prepareStatement(add);
+                PreparedStatement removing = con.prepareStatement(sub);
+                adding.setDouble(1,2000);
+                adding.setString(2,"Abhi");
+
+                removing.setDouble(1,310);
+                removing.setString(2,"12345");
+
+                int row = adding.executeUpdate();
+                int col = removing.executeUpdate();
+                if(row > 0 && col > 0){
+                    con.commit();
+                    System.out.println("Transcation is done abhijeet");
+                }else{
+                    con.rollback();
+                    System.out.println("Transaction is failed abhijeet");
+                }
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
