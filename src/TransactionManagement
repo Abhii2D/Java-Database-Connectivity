@@ -49,3 +49,16 @@ public class Main {
 
     }
 }
+
+
+---------------SQL Query---------------
+create database tran;
+use tran;
+create table send(
+Account_number varchar(28),
+amount decimal(10,2)
+);
+insert into send values("Abhi",1000.00);
+select * from send;
+drop table send;
+
