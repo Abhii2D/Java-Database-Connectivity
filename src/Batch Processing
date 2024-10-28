@@ -1,0 +1,68 @@
+import java.sql.*;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+
+        String url ="jdbc:mysql://localhost:3306/tran";
+        String name ="root";
+        String pass = "abhijeet@2002";
+        String que = "insert into emp(name,job,sal) values(?,?,?)";
+          try{
+            Class.forName("com.mysql.jdbc.Driver");
+        }catch (ClassNotFoundException e){
+            e.getException();
+        }
+          try{
+              Connection con = DriverManager.getConnection(url,name,pass);
+              System.out.println("Connection is Established !!!!!");
+              con.setAutoCommit(false);
+
+              PreparedStatement ps = con.prepareStatement(que);
+              System.out.println("Enter the Details : ");
+              Scanner sc = new Scanner(System.in);
+              while (true){
+                  System.out.print("name : ");
+                  String namee = sc.nextLine();
+                  System.out.print("Job : ");
+                  String job = sc.nextLine();
+                  System.out.print("Salary : ");
+                  double sal = sc.nextDouble();
+
+                  ps.setString(1,namee);
+                  ps.setString(2,job);
+                  ps.setDouble(3,sal);
+
+                  ps.addBatch();
+                  sc.nextLine();
+                  System.out.println("Do you want to continue? Y/N: ");
+                  String choice = sc.nextLine();
+                  if (choice.equalsIgnoreCase("N")) {
+                      break;
+                  }
+
+              }
+              int [] row = ps.executeBatch();
+              con.commit();
+          } catch (Exception e) {
+              throw new RuntimeException(e);
+          }
+
+
+
+    }
+}
+
+
+-----------------  SQL Query ------------
+create database tran;
+use tran;
+create table emp(
+id int auto_increment not null primary  key,
+name varchar(40) not null,
+job varchar(40) not null,
+sal double(10,2) not null
+);
+select * from emp;
+desc emp;
+drop table emp;
