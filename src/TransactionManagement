@@ -8,7 +8,7 @@ public class Main {
 
         String url ="jdbc:mysql://localhost:3306/tran";
         String name ="root";
-        String pass = "abhijeet@2002";
+        String pass = "";
         String add = "update send set amount = amount + ? where Account_number = ?";
         String sub = "update send set amount = amount - ? where Account_number = ?";
         try{
