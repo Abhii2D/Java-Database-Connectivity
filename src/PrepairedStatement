@@ -1,0 +1,67 @@
+import java.sql.*;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+
+        String url = "jdbc:mysql://localhost:3306/tran";
+        String name = "root";
+        String pass = "";
+        String que = "insert into emp(name,job,sal) values(?,?,?)";
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.getException();
+        }
+        try {
+            Connection con = DriverManager.getConnection(url, name, pass);
+            System.out.println("Connection is Established !!!!!");
+
+
+            PreparedStatement ps = con.prepareStatement(que);
+            System.out.println("Enter the Details : ");
+            Scanner sc = new Scanner(System.in);
+
+            System.out.print("name : ");
+            String namee = sc.nextLine();
+            System.out.print("Job : ");
+            String job = sc.nextLine();
+            System.out.print("Salary : ");
+            double sal = sc.nextDouble();
+            //  String timeString = sc.nextLine();
+            // Timestamp time = Timestamp.valueOf(timeString);
+            ps.setString(1, namee);
+            ps.setString(2, job);
+            ps.setDouble(3, sal);
+            //  ps.setInt(4, id);
+            // ps.setBytes(4, img);
+            // ps.setTimestamp(5, time);
+
+
+//                to display time
+//                    ps.setTimestamp("time").toString();
+//
+            int row = ps.executeUpdate();
+            if (row > 0) {
+                System.out.println(row + " Affected rows");
+            }
+
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+}
+
+
+
+while(true){
+sout("hello");
+sout"what ot exit enter y/n;"
+choic = sc.nextLine();
+if(choice.equalsIgnoreCase("n")){
+break; ---------------------------- this make loop stop and program get Terminated -------
+}
+}
