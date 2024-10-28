@@ -1,0 +1,19 @@
+create database bankingsystem;
+use bankingsystem;
+create table user(
+full_name varchar(250) not null,
+email varchar(255) primary key,
+password varchar(255) not null
+);
+drop table user;
+desc user;
+select * from user;
+
+create table accounts(
+account_number bigint not null primary key,
+full_name  varchar(222) not null,
+email varchar(255) unique not null,
+balance decimal(10,2) not null,
+security_pin char(4) not null
+);
+desc accounts;
