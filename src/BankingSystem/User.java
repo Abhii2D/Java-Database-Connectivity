@@ -16,7 +16,7 @@ public User(Connection con, Scanner sc) {
     }
 
 // Creating the user Register Method
-    public void register(){
+public void register(){
      sc.nextLine();
         System.out.print("Full Name : ");
         String fname = sc.nextLine();
@@ -49,6 +49,7 @@ public User(Connection con, Scanner sc) {
 
 
     }
+
 public boolean user_exit(String email){
 String CheckQuery = "select * from user where email = ? ";
 try{
@@ -66,6 +67,31 @@ try{
 }
 return false;
 }
+
+public String login(){
+sc.nextLine();
+    System.out.println("Enter the Email ID : ");
+    String Email = sc.nextLine();
+    System.out.println("Enter the Password : ");
+    String password = sc.nextLine();
+    String Log = "select * from user where email = ? and password = ?";
+
+    try {
+        PreparedStatement ps = con.prepareStatement(Log);
+        ps.setString(1,Email);
+        ps.setString(2,password);
+        ResultSet rs = ps.executeQuery();
+        if(rs.next()){
+            return Email;
+        }else{
+            return null;
+        }
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    }
+
+}
+
 
 
 
