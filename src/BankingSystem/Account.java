@@ -80,4 +80,24 @@ private long generateAccNumber(){
        }
 }
 
+   public long getAccount_num(String email) {
+        String query = "SELECT account_number FROM accounts WHERE email = ?";
+
+        try (PreparedStatement pst = con.prepareStatement(query)) {
+            pst.setString(1, email); // Set the email parameter
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                return rs.getLong("account_number");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Database error: " + e.getMessage(), e);
+        }
+
+        throw new RuntimeException("Account number does not exist for the given email.");
+    }
+
+
+
+
 }

@@ -54,14 +54,41 @@ public class BankingApp {
                                     System.out.println("Your Account Number is : " + accountNumber);
                                 }
 
-                            } else {
-                                break;
                             }
-                        } else {
-                            System.out.println("InCorrect Email and password!11111");
                         }
 
 
+                        accountNumber = ac.getAccount_num(email);
+                        int choice1 = 0;
+                        while (choice1 != 5){
+                            System.out.println();
+                            System.out.println("1 > Debit Money");
+                            System.out.println("2 > Credit Money");
+                            System.out.println("3 > Transfer Money");
+                            System.out.println("4 > Check Balance");
+                            System.out.println("5 > Log Out ");
+                            System.out.println("enter your Choice : ");
+                            choice1 = sc.nextInt();
+                            switch (choice1){
+                                case 1:
+                                    am.debit(accountNumber);
+                                    break;
+                                case 2:
+                                    am.credit(accountNumber);
+                                    break;
+                                case 3:
+                                    am.transfer(accountNumber);
+                                    break;
+                                case 4:
+                                    am.check(accountNumber);
+                                    break;
+                                case 5:
+                                    return;
+                                default:
+                                    throw new IllegalStateException("Unexpected value: " + choice1);
+                            }
+
+                        }
                     case 3:
                         System.out.println("Thankup for visiting application");
                         return;
