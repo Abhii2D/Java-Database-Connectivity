@@ -3,6 +3,7 @@ package BankingSystem;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class AccountManage {
@@ -98,27 +99,71 @@ public class AccountManage {
         }
     }
 
-    public void transfer(long accNum) {
-
-    }
-
-    public void check(long accNum) {
-     sc.nextLine();
+    public void transfer(long accNum) throws SQLException {
+        sc.nextLine();
+        System.out.println("Enter Transfer Account ID : ");
+        long rec_number = sc.nextLong();
+        System.out.println("Enter Transfer Amount :");
+        double amt = sc.nextDouble();
+        sc.nextLine();
         System.out.println("Enter Security pin : ");
         String pin = sc.nextLine();
 
-        try{PreparedStatement ps = con.prepareStatement("select * from accounts where account_number = ? and security_pin = ?");
-        ps.setLong(1,accNum);
-        ps.setString(2,pin);
-        ResultSet rs = ps.executeQuery();
-        if(rs.next()){
-            System.out.println("Name : "+ rs.getString("full_name"));
-            System.out.println("Account Number : " + accNum);
-            System.out.println("Current Balance : " + rs.getDouble("balance"));
-            System.out.println("Email Id : " + rs.getString("email"));
-            System.out.println("Security Pin : "+ rs.getString("security_pin"));
-        return;
+
+        try {
+            con.setAutoCommit(false);
+            PreparedStatement ps = con.prepareStatement("select * from accounts where account_number = ? and security_pin = ?");
+            ps.setLong(1, accNum);
+            ps.setString(2, pin);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                double current_balance = rs.getDouble("balance");
+                if (amt <= current_balance) {
+                    String creditQ = "update accounts set balance = balance - ? where account_number=?";
+                    String dQ = "update accounts set balance = balance + ? where account_number=?";
+
+                    PreparedStatement ps2 = con.prepareStatement(creditQ);
+                    PreparedStatement ps3 = con.prepareStatement(dQ);
+                    ps2.setDouble(1, amt);
+                    ps2.setLong(2, accNum);
+                    ps3.setDouble(1,amt);
+                    ps3.setLong(2,rec_number);
+                    ps2.executeUpdate();
+                    ps3.executeUpdate();
+                    con.commit();
+                    con.setAutoCommit(true);
+                    System.out.println("Transcation Successfull!!!!!!1");
+                }else{
+                    System.out.println("Transaction Failed!!!!");
+                    con.rollback();
+                    con.setAutoCommit(false);
+                }
+            }
+
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+    }
+
+    public void check(long accNum) {
+        sc.nextLine();
+        System.out.println("Enter Security pin : ");
+        String pin = sc.nextLine();
+
+        try {
+            PreparedStatement ps = con.prepareStatement("select * from accounts where account_number = ? and security_pin = ?");
+            ps.setLong(1, accNum);
+            ps.setString(2, pin);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                System.out.println("Name : " + rs.getString("full_name"));
+                System.out.println("Account Number : " + accNum);
+                System.out.println("Current Balance : " + rs.getDouble("balance"));
+                System.out.println("Email Id : " + rs.getString("email"));
+                System.out.println("Security Pin : " + rs.getString("security_pin"));
+                return;
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
